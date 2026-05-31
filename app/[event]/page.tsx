@@ -62,6 +62,15 @@ function SortableItem({
  transition,
  };
 
+ const today = new Date();
+today.setHours(0, 0, 0, 0);
+
+const isOverdue =
+task.dueDate &&
+!task.done &&
+new Date(task.dueDate) <= today;
+
+
  return (
  <div
  ref={setNodeRef}
@@ -75,10 +84,12 @@ function SortableItem({
  toggleTask(task)
  }
  className={`flex aspect-square w-full select-none items-end overflow-hidden rounded-3xl p-3 text-left text-sm shadow transition-all duration-300 active:scale-95 ${
- task.done
- ? "scale-95 bg-gray-200 text-gray-700"
- : "bg-white text-black"
- }`}
+task.done
+? "scale-95 bg-gray-200 text-gray-700"
+: isOverdue
+? "bg-red-100 text-red-700"
+: "bg-white text-black"
+}`}
  >
  <div>
 <div>
@@ -86,7 +97,13 @@ function SortableItem({
 </div>
 
 {task.dueDate && (
-<div className="text-xs opacity-70">
+<div
+className={`text-xs ${
+isOverdue
+? "font-semibold text-red-500"
+: "opacity-70"
+}`}
+>
 締切 {task.dueDate}
 </div>
 )}
