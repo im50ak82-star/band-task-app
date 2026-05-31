@@ -18,6 +18,7 @@ const [events, setEvents] = useState<
 {
 id: string;
 name: string;
+order: number;
 }[]
 >([]);
 
@@ -31,12 +32,17 @@ onSnapshot(
 collection(db, "events"),
 (snapshot) => {
 const eventsData =
-snapshot.docs.map(
-(doc) => ({
+snapshot.docs
+.map((doc) => ({
 id: doc.id,
-name:
-doc.data().name,
-})
+...(doc.data() as {
+name: string;
+order: number;
+}),
+}))
+.sort(
+(a, b) =>
+a.order - b.order
 );
 
 setEvents(eventsData);
@@ -57,6 +63,7 @@ await addDoc(
 collection(db, "events"),
 {
 name: newEvent,
+order: events.length,
 }
 );
 
