@@ -36,6 +36,7 @@ type Task = {
  title: string;
  done: boolean;
  order: number;
+ dueDate?: string;
 };
 
 function SortableItem({
@@ -79,9 +80,17 @@ function SortableItem({
  : "bg-white text-black"
  }`}
  >
- <span className="overflow-hidden text-ellipsis whitespace-nowrap">
- {task.title}
- </span>
+ <div>
+<div>
+{task.title}
+</div>
+
+{task.dueDate && (
+<div className="text-xs opacity-70">
+📅 {task.dueDate}
+</div>
+)}
+</div>
  </div>
 
  {/* 削除 */}
@@ -111,6 +120,9 @@ if (!event) return null;
  useState<Task[]>([]);
 
  const [newTask, setNewTask] =
+ useState("");
+
+ const [dueDate, setDueDate] =
  useState("");
 
  // 長押しでドラッグ
@@ -163,10 +175,12 @@ if (!event) return null;
  title: newTask,
  done: false,
  order: tasks.length,
+ dueDate,
  }
  );
 
  setNewTask("");
+ setDueDate("");
  };
 
  // 完了切り替え
@@ -301,6 +315,15 @@ if (!event) return null;
  placeholder="タスクを入力"
  className="flex-1 rounded-2xl border bg-white p-4 text-black placeholder-gray-500 outline-none"
  />
+
+ <input
+type="date"
+value={dueDate}
+onChange={(e) =>
+setDueDate(e.target.value)
+}
+className="rounded-2xl border bg-white p-4 text-black"
+/>
 
  <button
  onClick={addTask}
