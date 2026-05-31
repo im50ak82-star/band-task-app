@@ -87,7 +87,7 @@ function SortableItem({
 
 {task.dueDate && (
 <div className="text-xs opacity-70">
-📅 {task.dueDate}
+締切 {task.dueDate}
 </div>
 )}
 </div>
