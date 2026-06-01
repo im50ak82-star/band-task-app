@@ -262,7 +262,7 @@ className="flex h-14 w-14 items-center justify-center rounded-2xl bg-black text-
  rectSortingStrategy
  }
  >
- <div className="grid flex-1 grid-cols-3 gap-2 overflow-y-auto pb-24">
+ <div className="grid grid-cols-3 gap-2 overflow-y-auto pb-24">
  {events.map((event) => (
  <SortableEvent
  key={event.id}
