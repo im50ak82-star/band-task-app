@@ -56,7 +56,7 @@ return (
 <div
 ref={setNodeRef}
 style={style}
-className="relative"
+className="relative aspect-square"
 >
 <div
 {...attributes}
