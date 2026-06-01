@@ -56,7 +56,7 @@ return (
 <div
 ref={setNodeRef}
 style={style}
-className="relative aspect-square"
+className="relative touch-none"
 >
 <div
 {...attributes}
@@ -66,7 +66,7 @@ router.push(
 `/${event.name}`
 )
 }
-className="flex aspect-square items-end overflow-hidden rounded-3xl bg-white p-2 shadow transition-all duration-300 active:scale-95"
+className="flex aspect-square w-full items-end overflow-hidden rounded-3xl bg-white p-2 shadow transition-all duration-300 active:scale-95"
 >
 <h2 className="overflow-hidden text-ellipsis whitespace-nowrap text-sm font-semibold text-black">
 {event.name}
