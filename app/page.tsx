@@ -1,6 +1,6 @@
 "use client";
 
-import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 import { db } from "../firebase";
@@ -34,6 +34,7 @@ import { CSS } from "@dnd-kit/utilities";
 function SortableEvent({
 event,
 deleteEvent,
+router,
 }: any) {
 const {
 attributes,
@@ -57,16 +58,20 @@ ref={setNodeRef}
 style={style}
 className="relative"
 >
-<Link
-href={`/${event.name}`}
+<div
 {...attributes}
 {...listeners}
+onClick={() =>
+router.push(
+`/${event.name}`
+)
+}
 className="flex aspect-square items-end overflow-hidden rounded-3xl bg-white p-2 shadow transition-all duration-300 active:scale-95"
 >
 <h2 className="overflow-hidden text-ellipsis whitespace-nowrap text-sm font-semibold text-black">
 {event.name}
 </h2>
-</Link>
+</div>
 
 <button
 onClick={() =>
@@ -91,6 +96,8 @@ order: number;
 
 const [newEvent, setNewEvent] =
 useState("");
+
+const router = useRouter();
 
 const sensors = useSensors(
 useSensor(PointerSensor, {
@@ -263,6 +270,7 @@ className="flex h-14 w-14 items-center justify-center rounded-2xl bg-black text-
  deleteEvent={
  deleteEvent
  }
+ router={router}
  />
  ))}
  </div>
