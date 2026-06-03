@@ -31,6 +31,8 @@ import {
 
 import { CSS } from "@dnd-kit/utilities";
 
+import { useRouter } from "next/navigation";
+
 type Category = {
  id: string;
  name: string;
@@ -41,6 +43,7 @@ function SortableCategory({
  category,
  deleteCategory,
  event,
+    router,
 }: any) {
  const {
  attributes,
@@ -64,16 +67,20 @@ function SortableCategory({
  style={style}
  className="relative touch-none"
  >
- <Link
- href={`/${event}/${category.name}`}
+ <div
  {...attributes}
  {...listeners}
+ onClick={() =>
+ router.push(
+ `/${event}/${category.name}`
+ )
+ }
  className="flex aspect-square items-end overflow-hidden rounded-3xl bg-white p-2 shadow transition-all duration-300 active:scale-95"
  >
  <h2 className="overflow-hidden text-ellipsis whitespace-nowrap text-sm font-semibold text-black">
  {category.name}
  </h2>
- </Link>
+ </div>
 
  <button
  onClick={() =>
@@ -108,6 +115,8 @@ export default function EventPage({
  },
  })
  );
+
+ const router = useRouter();
 
  useEffect(() => {
  const unsubscribe =
@@ -279,6 +288,7 @@ export default function EventPage({
  deleteCategory
  }
  event={event}
+    router={router}
  />
  )
  )}
