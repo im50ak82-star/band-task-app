@@ -31,18 +31,16 @@ import {
 
 import { CSS } from "@dnd-kit/utilities";
 
-type Task = {
+type Category = {
  id: string;
- title: string;
- done: boolean;
+ name: string;
  order: number;
- dueDate?: string;
 };
 
-function SortableItem({
- task,
- toggleTask,
- deleteTask,
+function SortableCategory({
+ category,
+ deleteCategory,
+ event,
 }: any) {
  const {
  attributes,
@@ -51,25 +49,14 @@ function SortableItem({
  transform,
  transition,
  } = useSortable({
- id: task.id,
+ id: category.id,
  });
 
  const style = {
  transform:
- CSS.Transform.toString(
- transform
- ),
+ CSS.Transform.toString(transform),
  transition,
  };
-
- const today = new Date();
-today.setHours(0, 0, 0, 0);
-
-const isOverdue =
-task.dueDate &&
-!task.done &&
-new Date(task.dueDate) <= today;
-
 
  return (
  <div
@@ -77,45 +64,21 @@ new Date(task.dueDate) <= today;
  style={style}
  className="relative touch-none"
  >
- <div
+ <Link
+ href={`/${event}/${category.name}`}
  {...attributes}
  {...listeners}
- onClick={() =>
- toggleTask(task)
- }
- className={`flex aspect-square w-full select-none items-end overflow-hidden rounded-3xl p-3 text-left text-sm shadow transition-all duration-300 active:scale-95 ${
-task.done
-? "scale-95 bg-gray-200 text-gray-700"
-: isOverdue
-? "bg-red-100 text-red-700"
-: "bg-white text-black"
-}`}
+ className="flex aspect-square items-end overflow-hidden rounded-3xl bg-white p-2 shadow transition-all duration-300 active:scale-95"
  >
- <div>
-<div>
-{task.title}
-</div>
+ <h2 className="overflow-hidden text-ellipsis whitespace-nowrap text-sm font-semibold text-black">
+ {category.name}
+ </h2>
+ </Link>
 
-{task.dueDate && (
-<div
-className={`text-xs ${
-isOverdue
-? "font-semibold text-red-500"
-: "opacity-70"
-}`}
->
-締切 {task.dueDate}
-</div>
-)}
-</div>
- </div>
-
- {/* 削除 */}
  <button
- onClick={(e) => {
- e.stopPropagation();
- deleteTask(task);
- }}
+ onClick={() =>
+ deleteCategory(category.id)
+ }
  className="absolute right-1 top-1 text-xs text-red-500"
  >
  ✕
@@ -131,18 +94,12 @@ export default function EventPage({
 }) {
  const { event } = use(params);
 
-if (!event) return null;
+ const [categories, setCategories] =
+ useState<Category[]>([]);
 
- const [tasks, setTasks] =
- useState<Task[]>([]);
-
- const [newTask, setNewTask] =
+ const [newCategory, setNewCategory] =
  useState("");
 
- const [dueDate, setDueDate] =
- useState("");
-
- // 長押しでドラッグ
  const sensors = useSensors(
  useSensor(PointerSensor, {
  activationConstraint: {
@@ -152,76 +109,67 @@ if (!event) return null;
  })
  );
 
- // Firestore同期
  useEffect(() => {
  const unsubscribe =
  onSnapshot(
- collection(db, event),
+ collection(
+ db,
+ `${event}_categories`
+ ),
  (snapshot) => {
- const tasksData =
- snapshot.docs
+ const data = snapshot.docs
  .map((doc) => ({
  id: doc.id,
- ...(doc.data() as Omit<
- Task,
- "id"
- >),
+ ...(doc.data() as {
+ name: string;
+ order: number;
+ }),
  }))
  .sort(
  (a, b) =>
- a.order - b.order
+ (a.order ?? 0) -
+ (b.order ?? 0)
  );
 
- setTasks(tasksData);
+ setCategories(data);
  }
  );
 
  return () => unsubscribe();
  }, [event]);
 
- // タスク追加
- const addTask = async () => {
+ const addCategory =
+ async () => {
  if (
- newTask.trim() === ""
+ newCategory.trim() === ""
  )
  return;
 
  await addDoc(
- collection(db, event),
+ collection(
+ db,
+ `${event}_categories`
+ ),
  {
- title: newTask,
- done: false,
- order: tasks.length,
- dueDate,
+ name: newCategory,
+ order: categories.length,
  }
  );
 
- setNewTask("");
- setDueDate("");
+ setNewCategory("");
  };
 
- // 完了切り替え
- const toggleTask = async (
- task: Task
- ) => {
- await updateDoc(
- doc(db, event, task.id),
- {
- done: !task.done,
- }
- );
- };
-
- // 削除
- const deleteTask = async (
- task: Task
- ) => {
+ const deleteCategory =
+ async (id: string) => {
  await deleteDoc(
- doc(db, event, task.id)
+ doc(
+ db,
+ `${event}_categories`,
+ id
+ )
  );
  };
 
- // ドラッグ終了
  const handleDragEnd = async (
  eventData: any
  ) => {
@@ -235,33 +183,34 @@ if (!event) return null;
  return;
 
  const oldIndex =
- tasks.findIndex(
- (task) =>
- task.id === active.id
+ categories.findIndex(
+ (category) =>
+ category.id === active.id
  );
 
  const newIndex =
- tasks.findIndex(
- (task) =>
- task.id === over.id
+ categories.findIndex(
+ (category) =>
+ category.id === over.id
  );
 
- const newTasks = arrayMove(
- tasks,
+ const newCategories =
+ arrayMove(
+ categories,
  oldIndex,
  newIndex
  );
 
- setTasks(newTasks);
+ setCategories(newCategories);
 
  await Promise.all(
- newTasks.map(
- (task, index) =>
+ newCategories.map(
+ (category, index) =>
  updateDoc(
  doc(
  db,
- event,
- task.id
+ `${event}_categories`,
+ category.id
  ),
  {
  order: index,
@@ -270,21 +219,6 @@ if (!event) return null;
  )
  );
  };
-
- // 達成率
- const completedCount =
- tasks.filter(
- (task) => task.done
- ).length;
-
- const progress =
- tasks.length === 0
- ? 0
- : Math.round(
- (completedCount /
- tasks.length) *
- 100
- );
 
  return (
  <main className="flex h-screen flex-col overflow-hidden bg-gray-50 p-4">
@@ -299,51 +233,20 @@ if (!event) return null;
  {decodeURIComponent(event)}
  </h1>
 
- <div className="mb-6">
- <div className="mb-2 text-gray-700">
- 達成率 {progress}%
- </div>
-
- <div className="h-4 w-full overflow-hidden rounded-full bg-gray-200">
- <div
- className="h-full rounded-full bg-black transition-all duration-500"
- style={{
- width: `${progress}%`,
- }}
- />
- </div>
- </div>
-
  <div className="mb-6 flex gap-2">
  <input
- value={newTask}
+ value={newCategory}
  onChange={(e) =>
- setNewTask(
+ setNewCategory(
  e.target.value
  )
  }
- onKeyDown={(e) => {
- if (
- e.key === "Enter"
- ) {
- addTask();
- }
- }}
- placeholder="タスクを入力"
- className="flex-1 rounded-2xl border bg-white p-4 text-black placeholder-gray-500 outline-none"
+ placeholder="カテゴリ名"
+ className="flex-1 rounded-2xl border bg-white p-4 text-black outline-none"
  />
 
- <input
-type="date"
-value={dueDate}
-onChange={(e) =>
-setDueDate(e.target.value)
-}
-className="rounded-2xl border bg-white p-4 text-black"
-/>
-
  <button
- onClick={addTask}
+ onClick={addCategory}
  className="rounded-2xl bg-black px-5 text-white active:scale-95"
  >
  ＋
@@ -355,31 +258,30 @@ className="rounded-2xl border bg-white p-4 text-black"
  collisionDetection={
  closestCenter
  }
- onDragEnd={
- handleDragEnd
- }
+ onDragEnd={handleDragEnd}
  >
  <SortableContext
- items={tasks.map(
- (task) => task.id
+ items={categories.map(
+ (category) =>
+ category.id
  )}
  strategy={
  rectSortingStrategy
  }
  >
- <div className="grid flex-1 grid-cols-3 gap-2 overflow-y-auto pb-24">
- {tasks.map((task) => (
- <SortableItem
- key={task.id}
- task={task}
- toggleTask={
- toggleTask
+ <div className="grid grid-cols-3 gap-2 overflow-y-auto content-start">
+ {categories.map(
+ (category) => (
+ <SortableCategory
+ key={category.id}
+ category={category}
+ deleteCategory={
+ deleteCategory
  }
- deleteTask={
- deleteTask
- }
+ event={event}
  />
- ))}
+ )
+ )}
  </div>
  </SortableContext>
  </DndContext>
