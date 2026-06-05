@@ -95,13 +95,13 @@ background:
 />
 
 <div
-className="absolute -top-4 left-0 h-8 w-[200%]"
+className="absolute -top-2 left-[-50%] h-4 w-[200%]"
 style={{
 background:
-"rgba(255,255,255,0.35)",
-borderRadius: "40%",
+"rgba(255,255,255,0.5)",
+borderRadius: "100%",
 animation:
-"wave 8s linear infinite",
+"wave 6s ease-in-out infinite alternate",
 }}
 />
 </div>
