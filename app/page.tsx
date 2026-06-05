@@ -12,6 +12,7 @@ onSnapshot,
 deleteDoc,
 doc,
 updateDoc,
+getDocs,
 } from "firebase/firestore";
 
 import {
@@ -68,9 +69,15 @@ router.push(
 }
 className="flex aspect-square w-full items-end overflow-hidden rounded-3xl bg-white p-2 shadow transition-all duration-300 active:scale-95"
 >
+<div>
 <h2 className="overflow-hidden text-ellipsis whitespace-nowrap text-sm font-semibold text-black">
 {event.name}
 </h2>
+
+<div className="text-xs text-gray-500">
+達成率 {event.progress ?? 0}%
+</div>
+</div>
 </div>
 
 <button
@@ -91,6 +98,7 @@ const [events, setEvents] = useState<
 id: string;
 name: string;
 order: number;
+progress?: number;
 }[]
 >([]);
 
@@ -110,20 +118,83 @@ tolerance: 5,
 
 // Firestore同期
 useEffect(() => {
-const unsubscribe =
-onSnapshot(
+const unsubscribe = onSnapshot(
 collection(db, "events"),
-(snapshot) => {
-const eventsData =
-snapshot.docs
-.map((doc) => ({
-id: doc.id,
-...(doc.data() as {
+async (snapshot) => {
+
+const eventsData = await Promise.all(
+snapshot.docs.map(
+async (docSnap) => {
+
+const event = {
+id: docSnap.id,
+...(docSnap.data() as {
 name: string;
 order: number;
 }),
-}))
-.sort(
+};
+
+console.log("event.name =", event.name);
+
+const encodedEvent =
+encodeURIComponent(event.name);
+
+const categoriesSnapshot =
+await getDocs(
+collection(
+db,
+`${encodedEvent}_categories`
+)
+);
+
+let totalTasks = 0;
+let completedTasks = 0;
+
+for (const categoryDoc of categoriesSnapshot.docs) {
+
+const category =
+categoryDoc.data();
+
+const tasksSnapshot =
+await getDocs(
+collection(
+db,
+`${encodedEvent}_${category.name}`
+)
+);
+
+const tasks =
+tasksSnapshot.docs.map(
+(doc) => doc.data()
+);
+
+totalTasks += tasks.length;
+
+completedTasks +=
+tasks.filter(
+(task: any) =>
+task.done
+).length;
+}
+
+const progress =
+totalTasks === 0
+? 0
+: Math.round(
+(completedTasks /
+totalTasks) *
+100
+);
+
+return {
+...event,
+progress,
+};
+}
+)
+);
+
+eventsData.sort(
 (a, b) =>
 a.order - b.order
 );

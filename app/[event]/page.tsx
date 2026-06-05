@@ -12,6 +12,7 @@ import {
  deleteDoc,
  doc,
  updateDoc,
+ getDocs,
 } from "firebase/firestore";
 
 import {
@@ -37,6 +38,7 @@ type Category = {
  id: string;
  name: string;
  order: number;
+ progress?: number;
 };
 
 function SortableCategory({
@@ -75,11 +77,24 @@ function SortableCategory({
  `/${event}/${category.name}`
  )
  }
- className="flex aspect-square items-end overflow-hidden rounded-3xl bg-white p-2 shadow transition-all duration-300 active:scale-95"
+ className="relative flex aspect-square items-end overflow-hidden rounded-3xl bg-white p-2 shadow transition-all duration-300 active:scale-95"
  >
- <h2 className="overflow-hidden text-ellipsis whitespace-nowrap text-sm font-semibold text-black">
- {category.name}
- </h2>
+<div
+className="absolute bottom-0 left-0 w-full bg-blue-500"
+style={{
+height: `${category.progress ?? 0}%`,
+}}
+/>
+
+<div className="relative z-10">
+<h2 className="overflow-hidden text-ellipsis whitespace-nowrap text-sm font-semibold text-black">
+{category.name}
+</h2>
+
+<div className="mt-1 text-xs text-gray-700">
+{category.progress ?? 0}%
+</div>
+</div>
  </div>
 
  <button
@@ -118,34 +133,76 @@ export default function EventPage({
 
  const router = useRouter();
 
- useEffect(() => {
- const unsubscribe =
- onSnapshot(
- collection(
- db,
- `${event}_categories`
- ),
- (snapshot) => {
- const data = snapshot.docs
- .map((doc) => ({
- id: doc.id,
- ...(doc.data() as {
- name: string;
- order: number;
- }),
- }))
- .sort(
- (a, b) =>
- (a.order ?? 0) -
- (b.order ?? 0)
- );
+useEffect(() => {
+const unsubscribe = onSnapshot(
+collection(db, `${event}_categories`),
+async (snapshot) => {
+const data = snapshot.docs
+.map((doc) => ({
+id: doc.id,
+...(doc.data() as {
+name: string;
+order: number;
+}),
+}))
+.sort(
+(a, b) =>
+(a.order ?? 0) -
+(b.order ?? 0)
+);
 
- setCategories(data);
- }
- );
+const categoriesWithProgress =
+await Promise.all(
+data.map(async (category) => {
 
- return () => unsubscribe();
- }, [event]);
+const taskSnapshot =
+await getDocs(
+collection(
+db,
+`${event}_${category.name}`
+)
+);
+
+
+const tasks =
+taskSnapshot.docs.map(
+(doc) => doc.data()
+);
+
+const total =
+tasks.length;
+
+const completed =
+tasks.filter(
+(task: any) =>
+task.done
+).length;
+
+
+const progress =
+total === 0
+? 0
+: Math.round(
+(completed /
+total) *
+100
+);
+
+return {
+...category,
+progress,
+};
+})
+);
+
+setCategories(
+categoriesWithProgress
+);
+}
+);
+
+return () => unsubscribe();
+}, [event]);
 
  const addCategory =
  async () => {
@@ -243,16 +300,22 @@ export default function EventPage({
  </h1>
 
  <div className="mb-6 flex gap-2">
+
  <input
- value={newCategory}
- onChange={(e) =>
- setNewCategory(
- e.target.value
- )
- }
- placeholder="カテゴリ名"
- className="flex-1 rounded-2xl border bg-white p-4 text-black outline-none"
- />
+value={newCategory}
+onChange={(e) =>
+setNewCategory(
+e.target.value
+)
+}
+onKeyDown={(e) => {
+if (e.key === "Enter") {
+addCategory();
+}
+}}
+placeholder="カテゴリ名"
+className="flex-1 rounded-2xl border bg-white p-4 text-black outline-none"
+/>
 
  <button
  onClick={addCategory}

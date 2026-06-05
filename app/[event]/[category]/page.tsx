@@ -131,6 +131,8 @@ export default function CategoryPage({
 }) {
  const { event, category } = use(params);
 
+
+
 if (!event) return null;
 
  const [tasks, setTasks] =
@@ -158,7 +160,7 @@ if (!event) return null;
  onSnapshot(
  collection(
 db,
-`${event}_${category}`
+`${event}_${decodeURIComponent(category)}`
 ),
  (snapshot) => {
  const tasksData =
@@ -192,7 +194,7 @@ db,
  await addDoc(
  collection(
 db,
-`${event}_${category}`
+`${event}_${decodeURIComponent(category)}`
 ),
  {
  title: newTask,
@@ -211,7 +213,7 @@ db,
  task: Task
  ) => {
  await updateDoc(
- doc(db, `${event}_${category}`, task.id),
+ doc(db, `${event}_${decodeURIComponent(category)}`, task.id),
  {
  done: !task.done,
  }
@@ -223,7 +225,7 @@ db,
  task: Task
  ) => {
  await deleteDoc(
- doc(db, `${event}_${category}`, task.id),
+ doc(db, `${event}_${decodeURIComponent(category)}`, task.id),
  );
  };
 
@@ -266,7 +268,7 @@ db,
  updateDoc(
  doc(
  db,
- `${event}_${category}`,
+ `${event}_${decodeURIComponent(category)}`,
  task.id
  ),
  {
