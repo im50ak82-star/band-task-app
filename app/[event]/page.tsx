@@ -80,11 +80,31 @@ function SortableCategory({
  className="relative flex aspect-square items-end overflow-hidden rounded-3xl bg-white p-2 shadow transition-all duration-300 active:scale-95"
  >
 <div
-className="absolute bottom-0 left-0 w-full bg-blue-500"
+className="absolute bottom-0 left-0 w-full overflow-hidden"
 style={{
 height: `${category.progress ?? 0}%`,
+transition: "height 1.2s ease-out",
+}}
+>
+<div
+className="absolute inset-0"
+style={{
+background:
+"linear-gradient(to top, rgba(59,130,246,0.45), rgba(125,211,252,0.25))",
 }}
 />
+
+<div
+className="absolute -top-4 left-0 h-8 w-[200%]"
+style={{
+background:
+"rgba(255,255,255,0.35)",
+borderRadius: "40%",
+animation:
+"wave 8s linear infinite",
+}}
+/>
+</div>
 
 <div className="relative z-10">
 <h2 className="overflow-hidden text-ellipsis whitespace-nowrap text-sm font-semibold text-black">
