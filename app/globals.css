@@ -26,9 +26,23 @@ body {
 }
 
 @keyframes wave {
-  0% {
-    transform: translateX(-25%) ;}
-  100% {
-    transform: translateX(25%) ;
-  }
+0% {
+transform: translateX(-20%) translateY(0px);
+}
+
+25% {
+transform: translateX(-10%) translateY(-3px);
+}
+
+50% {
+transform: translateX(0%) translateY(0px);
+}
+
+75% {
+transform: translateX(10%) translateY(-3px);
+}
+
+100% {
+transform: translateX(20%) translateY(0px);
+}
 }
