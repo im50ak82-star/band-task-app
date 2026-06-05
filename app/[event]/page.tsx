@@ -106,6 +106,24 @@ animation:
 />
 </div>
 
+<div
+className="absolute -top-3 left-[-50%] h-6 w-[200%]"
+style={{
+background: "rgba(255,255,255,0.45)",
+borderRadius: "100%",
+animation: "wave 6s ease-in-out infinite alternate",
+}}
+/>
+
+<div
+className="absolute -top-2 left-[-50%] h-5 w-[200%]"
+style={{
+background: "rgba(255,255,255,0.25)",
+borderRadius: "100%",
+animation: "wave 4s ease-in-out infinite alternate-reverse",
+}}
+/>
+
 <div className="relative z-10">
 <h2 className="overflow-hidden text-ellipsis whitespace-nowrap text-sm font-semibold text-black">
 {category.name}
