@@ -84,6 +84,7 @@ className="absolute bottom-0 left-0 w-full overflow-hidden"
 style={{
 height: `${category.progress ?? 0}%`,
 transition: "height 2s cubic-bezier(0.22, 1, 0.36, 1)",
+background:"rgba(0,0,255,0.3)"
 }}
 >
 <div
