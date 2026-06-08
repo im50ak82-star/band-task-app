@@ -127,8 +127,7 @@ fill="rgba(255,255,255,0.25)"
 />
 </svg>
 
-<div className="splash splash-left" />
-<div className="splash splash-right" />
+
 
 </>
 )}
@@ -156,6 +155,9 @@ animationDelay: "2s",
 }}
 />
 </div>
+
+<div className="splash splash-left" />
+<div className="splash splash-right" />
 
 <div className="relative z-10">
 <h2 className="overflow-hidden text-ellipsis whitespace-nowrap text-sm font-semibold text-black">
