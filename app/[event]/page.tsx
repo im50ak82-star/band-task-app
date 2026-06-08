@@ -80,23 +80,8 @@ function SortableCategory({
  className="relative flex aspect-square items-end overflow-hidden rounded-3xl bg-white p-2 shadow transition-all duration-300 active:scale-95"
  >
 
-<div
-className="absolute bottom-0 left-0 w-full overflow-hidden"
-style={{
-height: `${category.progress ?? 0}%`,
-transition: "height 2s cubic-bezier(0.22, 1, 0.36, 1)",
-}}
->
-<div
-className="absolute inset-0"
-style={{
-background:
-(category.progress ?? 0) === 100
-? "linear-gradient(to top, rgba(14,165,233,0.85), rgba(56,189,248,0.75))"
-: "linear-gradient(to top, rgba(56,189,248,0.65), rgba(56,189,248,0.55))",
-}}
-/>
-
+{(category.progress ?? 0) < 100 && (
+<>
 <svg
 className="absolute -top-4 left-0 w-[200%]"
 viewBox="0 0 1200 120"
@@ -126,6 +111,9 @@ d="M0,60 C150,140 300,-20 600,60 C900,140 1050,-20 1200,60 L1200,120 L0,120 Z"
 fill="rgba(255,255,255,0.25)"
 />
 </svg>
+</>
+)}
+
 <div
 className="absolute left-[20%] bottom-2 h-2 w-2 rounded-full bg-white/60"
 style={{
@@ -148,7 +136,6 @@ animation: "bubble 3.5s linear infinite",
 animationDelay: "2s",
 }}
 />
-</div>
 
 <div className="relative z-10">
 <h2 className="overflow-hidden text-ellipsis whitespace-nowrap text-sm font-semibold text-black">
