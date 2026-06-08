@@ -126,6 +126,10 @@ d="M0,60 C80,-60 220,180 420,60 C620,-60 820,180 1200,60 L1200,120 L0,120 Z"
 fill="rgba(255,255,255,0.25)"
 />
 </svg>
+
+<div className="splash splash-left" />
+<div className="splash splash-right" />
+
 </>
 )}
 
