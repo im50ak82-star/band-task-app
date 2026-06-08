@@ -91,7 +91,9 @@ transition: "height 2s cubic-bezier(0.22, 1, 0.36, 1)",
 className="absolute inset-0"
 style={{
 background:
-"linear-gradient(to top, rgba(56,189,248,0.45), rgba(186,230,253,0.25))",
+(category.progress ?? 0) === 100
+? "linear-gradient(to top, rgba(14,165,233,0.85), rgba(56,189,248,0.75))"
+: "linear-gradient(to top, rgba(56,189,248,0.65), rgba(56,189,248,0.55))",
 }}
 />
 
@@ -124,6 +126,28 @@ d="M0,60 C150,140 300,-20 600,60 C900,140 1050,-20 1200,60 L1200,120 L0,120 Z"
 fill="rgba(255,255,255,0.25)"
 />
 </svg>
+<div
+className="absolute left-[20%] bottom-2 h-2 w-2 rounded-full bg-white/60"
+style={{
+animation: "bubble 4s linear infinite",
+}}
+/>
+
+<div
+className="absolute left-[55%] bottom-4 h-3 w-3 rounded-full bg-white/50"
+style={{
+animation: "bubble 5s linear infinite",
+animationDelay: "1s",
+}}
+/>
+
+<div
+className="absolute left-[75%] bottom-1 h-2 w-2 rounded-full bg-white/40"
+style={{
+animation: "bubble 3.5s linear infinite",
+animationDelay: "2s",
+}}
+/>
 </div>
 
 <div className="relative z-10">
