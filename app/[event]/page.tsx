@@ -79,7 +79,7 @@ function SortableCategory({
  }
  className="relative flex aspect-square items-end overflow-hidden rounded-3xl bg-white p-2 shadow transition-all duration-300 active:scale-95"
  >
-    
+
 <div
 className="absolute bottom-0 left-0 w-full overflow-hidden"
 style={{
@@ -100,7 +100,7 @@ className="absolute -top-4 left-0 w-[200%]"
 viewBox="0 0 1200 120"
 preserveAspectRatio="none"
 style={{
-height: "40px",
+height: "20px",
 animation: "waveMove 8s linear infinite",
 }}
 >
@@ -115,7 +115,7 @@ className="absolute -top-3 left-0 w-[200%]"
 viewBox="0 0 1200 120"
 preserveAspectRatio="none"
 style={{
-height: "30px",
+height: "14px",
 animation: "waveMoveReverse 6s linear infinite",
 }}
 >
