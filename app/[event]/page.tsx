@@ -98,31 +98,31 @@ background:
 {(category.progress ?? 0) < 100 && (
 <>
 <svg
-className="absolute -top-4 left-0 w-[200%]"
+className="absolute -top-6 left-0 w-[200%]"
 viewBox="0 0 1200 120"
 preserveAspectRatio="none"
 style={{
-height: "20px",
-animation: "waveMove 3s linear infinite",
+height: "28px",
+animation: "waveMove 3s linear infinite, waveBob 2s ease-in-out infinite",
 }}
 >
 <path
-d="M0,60 C100,-20 250,140 450,60 C650,-20 850,140 1200,60 L1200,120 L0,120 Z"
+d="M0,60 C80,-60 220,180 420,60 C620,-60 820,180 1200,60 L1200,120 L0,120 Z"
 fill="rgba(255,255,255,0.45)"
 />
 </svg>
 
 <svg
-className="absolute -top-3 left-0 w-[200%]"
+className="absolute -top-4 left-0 w-[200%]"
 viewBox="0 0 1200 120"
 preserveAspectRatio="none"
 style={{
-height: "14px",
-animation: "waveMoveReverse 2s linear infinite",
+height: "22px",
+animation: "waveMoveReverse 2.5s linear infinite, waveBob 1.6s ease-in-out infinite reverse",
 }}
 >
 <path
-d="M0,60 C150,140 300,-20 600,60 C900,140 1050,-20 1200,60 L1200,120 L0,120 Z"
+d="M0,60 C80,-60 220,180 420,60 C620,-60 820,180 1200,60 L1200,120 L0,120 Z"
 fill="rgba(255,255,255,0.25)"
 />
 </svg>

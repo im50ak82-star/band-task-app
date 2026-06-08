@@ -96,3 +96,21 @@ transform: translate(2px, -80px);
 opacity: 0;
 }
 }
+
+@keyframes waveBob {
+0% {
+transform: translateY(0px);
+}
+25% {
+transform: translateY(-6px);
+}
+50% {
+transform: translateY(2px);
+}
+75% {
+transform: translateY(-4px);
+}
+100% {
+transform: translateY(0px);
+}
+}
