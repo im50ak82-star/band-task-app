@@ -90,7 +90,7 @@ transition: "height 2s cubic-bezier(0.22, 1, 0.36, 1)",
 className="absolute inset-0"
 style={{
 background:
-"linear-gradient(to top, rgba(59,130,246,0.45), rgba(125,211,252,0.25))",
+"linear-gradient(to top, rgba(56,189,248,0.30), rgba(186,230,253,0.15))",
 }}
 />
 
