@@ -79,7 +79,22 @@ function SortableCategory({
  }
  className="relative flex aspect-square items-end overflow-hidden rounded-3xl bg-white p-2 shadow transition-all duration-300 active:scale-95"
  >
-
+<div
+className="absolute bottom-0 left-0 w-full overflow-hidden"
+style={{
+height: `${category.progress ?? 0}%`,
+transition: "height 2s cubic-bezier(0.22, 1, 0.36, 1)",
+}}
+>
+<div
+className="absolute inset-0"
+style={{
+background:
+(category.progress ?? 0) === 100
+? "linear-gradient(to top, rgba(14,165,233,0.85), rgba(56,189,248,0.75))"
+: "linear-gradient(to top, rgba(56,189,248,0.65), rgba(56,189,248,0.55))",
+}}
+/>
 {(category.progress ?? 0) < 100 && (
 <>
 <svg
@@ -136,6 +151,7 @@ animation: "bubble 3.5s linear infinite",
 animationDelay: "2s",
 }}
 />
+</div>
 
 <div className="relative z-10">
 <h2 className="overflow-hidden text-ellipsis whitespace-nowrap text-sm font-semibold text-black">
