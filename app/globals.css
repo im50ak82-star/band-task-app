@@ -25,24 +25,20 @@ body {
   font-family: Arial, Helvetica, sans-serif;
 }
 
-@keyframes wave {
-0% {
-transform: translateX(-20%) translateY(0px);
+@keyframes waveMove {
+from {
+transform: translateX(0);
+}
+to {
+transform: translateX(-50%);
+}
 }
 
-25% {
-transform: translateX(-10%) translateY(-3px);
+@keyframes waveMoveReverse {
+from {
+transform: translateX(-50%);
 }
-
-50% {
-transform: translateX(0%) translateY(0px);
-}
-
-75% {
-transform: translateX(10%) translateY(-3px);
-}
-
-100% {
-transform: translateX(20%) translateY(0px);
+to {
+transform: translateX(0);
 }
 }

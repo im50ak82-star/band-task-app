@@ -79,6 +79,7 @@ function SortableCategory({
  }
  className="relative flex aspect-square items-end overflow-hidden rounded-3xl bg-white p-2 shadow transition-all duration-300 active:scale-95"
  >
+    
 <div
 className="absolute bottom-0 left-0 w-full overflow-hidden"
 style={{
@@ -94,35 +95,36 @@ background:
 }}
 />
 
-<div
-className="absolute -top-2 left-[-50%] h-4 w-[200%]"
+<svg
+className="absolute -top-4 left-0 w-[200%]"
+viewBox="0 0 1200 120"
+preserveAspectRatio="none"
 style={{
-background:
-"rgba(255,255,255,0.5)",
-borderRadius: "100%",
-animation:
-"wave 6s ease-in-out infinite alternate",
+height: "40px",
+animation: "waveMove 8s linear infinite",
 }}
+>
+<path
+d="M0,60 C150,0 350,120 600,60 C850,0 1050,120 1200,60 L1200,120 L0,120 Z"
+fill="rgba(255,255,255,0.45)"
 />
+</svg>
+
+<svg
+className="absolute -top-3 left-0 w-[200%]"
+viewBox="0 0 1200 120"
+preserveAspectRatio="none"
+style={{
+height: "30px",
+animation: "waveMoveReverse 6s linear infinite",
+}}
+>
+<path
+d="M0,60 C200,120 400,0 600,60 C800,120 1000,0 1200,60 L1200,120 L0,120 Z"
+fill="rgba(255,255,255,0.25)"
+/>
+</svg>
 </div>
-
-<div
-className="absolute -top-3 left-[-50%] h-6 w-[200%]"
-style={{
-background: "rgba(255,255,255,0.45)",
-borderRadius: "100%",
-animation: "wave 6s ease-in-out infinite alternate",
-}}
-/>
-
-<div
-className="absolute -top-2 left-[-50%] h-5 w-[200%]"
-style={{
-background: "rgba(255,255,255,0.25)",
-borderRadius: "100%",
-animation: "wave 4s ease-in-out infinite alternate-reverse",
-}}
-/>
 
 <div className="relative z-10">
 <h2 className="overflow-hidden text-ellipsis whitespace-nowrap text-sm font-semibold text-black">
