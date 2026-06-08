@@ -101,11 +101,11 @@ viewBox="0 0 1200 120"
 preserveAspectRatio="none"
 style={{
 height: "20px",
-animation: "waveMove 8s linear infinite",
+animation: "waveMove 3s linear infinite",
 }}
 >
 <path
-d="M0,60 C150,0 350,120 600,60 C850,0 1050,120 1200,60 L1200,120 L0,120 Z"
+d="M0,60 C100,-20 250,140 450,60 C650,-20 850,140 1200,60 L1200,120 L0,120 Z"
 fill="rgba(255,255,255,0.45)"
 />
 </svg>
@@ -116,11 +116,11 @@ viewBox="0 0 1200 120"
 preserveAspectRatio="none"
 style={{
 height: "14px",
-animation: "waveMoveReverse 6s linear infinite",
+animation: "waveMoveReverse 2s linear infinite",
 }}
 >
 <path
-d="M0,60 C200,120 400,0 600,60 C800,120 1000,0 1200,60 L1200,120 L0,120 Z"
+d="M0,60 C150,140 300,-20 600,60 C900,140 1050,-20 1200,60 L1200,120 L0,120 Z"
 fill="rgba(255,255,255,0.25)"
 />
 </svg>

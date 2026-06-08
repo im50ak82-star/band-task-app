@@ -26,19 +26,45 @@ body {
 }
 
 @keyframes waveMove {
-from {
-transform: translateX(0);
+0% {
+transform: translateX(0) translateY(0);
 }
-to {
-transform: translateX(-50%);
+
+25% {
+transform: translateX(-12%) translateY(-8px);
+}
+
+50% {
+transform: translateX(-25%) translateY(0);
+}
+
+75% {
+transform: translateX(-38%) translateY(-8px);
+}
+
+100% {
+transform: translateX(-50%) translateY(0);
 }
 }
 
 @keyframes waveMoveReverse {
-from {
-transform: translateX(-50%);
+0% {
+transform: translateX(-50%) translateY(0);
 }
-to {
-transform: translateX(0);
+
+25% {
+transform: translateX(-38%) translateY(6px);
+}
+
+50% {
+transform: translateX(-25%) translateY(0);
+}
+
+75% {
+transform: translateX(-12%) translateY(6px);
+}
+
+100% {
+transform: translateX(0) translateY(0);
 }
 }
