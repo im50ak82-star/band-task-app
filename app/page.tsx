@@ -32,6 +32,9 @@ useSortable,
 
 import { CSS } from "@dnd-kit/utilities";
 
+import { auth } from "../firebase";
+import { onAuthStateChanged } from "firebase/auth";
+
 function SortableEvent({
 event,
 deleteEvent,
@@ -101,6 +104,17 @@ order: number;
 progress?: number;
 }[]
 >([]);
+
+const [user, setUser] =
+useState<any>(null);
+
+useEffect(() => {
+const unsubscribe =
+onAuthStateChanged(auth, (user) => {
+setUser(user);
+});
+return () => unsubscribe();
+}, []);
 
 const [newEvent, setNewEvent] =
 useState("");
@@ -287,6 +301,12 @@ return (
 <h1 className="mb-6 text-3xl font-bold text-black">
 FPWE tasks
 </h1>
+
+{user && (
+<div className="mb-4 text-sm text-gray-600">
+ログイン中: {user.displayName}
+</div>
+)}
 
 <div className="mb-6 flex items-center gap-2">
 <input
