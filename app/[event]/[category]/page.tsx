@@ -5,6 +5,10 @@ import { use, useEffect, useState } from "react";
 
 import { db } from "../../../firebase";
 
+import { auth } from "../../../firebase";
+
+import { onAuthStateChanged } from "firebase/auth";
+
 import {
  collection,
  addDoc,
@@ -12,6 +16,7 @@ import {
  deleteDoc,
  doc,
  updateDoc,
+ getDoc,
 } from "firebase/firestore";
 
 import {
@@ -37,6 +42,9 @@ type Task = {
  done: boolean;
  order: number;
  dueDate?: string;
+
+ createdBy?: string;
+ completedBy?: string;
 };
 
 function SortableItem({
@@ -91,7 +99,7 @@ task.done
 : "bg-white text-black"
 }`}
  >
- <div>
+<div>
 <div>
 {task.title}
 </div>
@@ -105,6 +113,18 @@ isOverdue
 }`}
 >
 締切 {task.dueDate}
+</div>
+)}
+
+{task.createdBy && (
+<div className="text-xs opacity-60">
+追加: {task.createdBy}
+</div>
+)}
+
+{task.completedBy && (
+<div className="text-xs text-green-600">
+完了: {task.completedBy}
 </div>
 )}
 </div>
@@ -143,6 +163,12 @@ if (!event) return null;
 
  const [dueDate, setDueDate] =
  useState("");
+
+ const [user, setUser] =
+useState<any>(null);
+
+const [nickname, setNickname] =
+useState("");
 
  // 長押しでドラッグ
  const sensors = useSensors(
@@ -184,12 +210,43 @@ db,
  return () => unsubscribe();
  }, [event, category]);
 
+ useEffect(() => {
+const unsubscribe =
+onAuthStateChanged(
+auth,
+async (user) => {
+setUser(user);
+
+if (!user) return;
+
+const userSnap =
+await getDoc(
+doc(
+db,
+"users",
+user.uid
+)
+);
+
+if (userSnap.exists()) {
+setNickname(
+userSnap.data()
+.nickname
+);
+}
+}
+);
+
+return unsubscribe;
+}, []);
+
  // タスク追加
- const addTask = async () => {
- if (
- newTask.trim() === ""
- )
- return;
+const addTask = async () => {
+if (
+newTask.trim() === "" ||
+!user
+)
+return;
 
  await addDoc(
  collection(
@@ -201,6 +258,12 @@ db,
  done: false,
  order: tasks.length,
  dueDate,
+
+ createdBy: nickname,
+ createdByUid: user.uid,
+
+ completedBy: null,
+ completedAt: null,
  }
  );
 
@@ -210,15 +273,27 @@ db,
 
  // 完了切り替え
  const toggleTask = async (
- task: Task
- ) => {
- await updateDoc(
- doc(db, `${event}_${decodeURIComponent(category)}`, task.id),
- {
- done: !task.done,
- }
- );
- };
+task: Task
+) => {
+await updateDoc(
+doc(
+db,
+`${event}_${decodeURIComponent(category)}`,
+task.id
+),
+task.done
+? {
+done: false,
+completedBy: null,
+completedAt: null,
+}
+: {
+done: true,
+completedBy: nickname,
+completedAt: new Date(),
+}
+);
+};
 
  // 削除
  const deleteTask = async (

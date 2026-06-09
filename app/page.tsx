@@ -13,6 +13,8 @@ deleteDoc,
 doc,
 updateDoc,
 getDocs,
+getDoc,
+setDoc,
 } from "firebase/firestore";
 
 import {
@@ -108,13 +110,34 @@ progress?: number;
 const [user, setUser] =
 useState<any>(null);
 
+const [nickname, setNickname] = useState("");
+
+const [needsNickname, setNeedsNickname] = useState(false);
+
 useEffect(() => {
 const unsubscribe =
-onAuthStateChanged(auth, (user) => {
+onAuthStateChanged(
+auth,
+async (user) => {
 setUser(user);
-});
-return () => unsubscribe();
+
+if (!user) return;
+
+const userRef =
+doc(db, "users", user.uid);
+
+const userSnap =
+await getDoc(userRef);
+
+if (!userSnap.exists()) {
+setNeedsNickname(true);
+}
+}
+);
+
+return unsubscribe;
 }, []);
+
 
 const [newEvent, setNewEvent] =
 useState("");
@@ -247,6 +270,21 @@ doc(db, "events", id)
 );
 };
 
+const saveNickname = async () => {
+if (!user || !nickname.trim())
+return;
+
+await setDoc(
+doc(db, "users", user.uid),
+{
+nickname,
+email: user.email,
+}
+);
+
+setNeedsNickname(false);
+};
+
 const handleDragEnd = async (
 eventData: any
 ) => {
@@ -295,6 +333,32 @@ order: index,
 )
 );
 };
+
+if (needsNickname) {
+return (
+<main className="flex h-screen flex-col items-center justify-center gap-4">
+<h1 className="text-2xl font-bold">
+ニックネーム登録
+</h1>
+
+<input
+value={nickname}
+onChange={(e) =>
+setNickname(e.target.value)
+}
+placeholder="ニックネーム"
+className="rounded-xl border p-3 text-black"
+/>
+
+<button
+onClick={saveNickname}
+className="rounded-xl bg-black px-4 py-2 text-white"
+>
+登録
+</button>
+</main>
+);
+}
 
 return (
 <main className="flex h-screen flex-col overflow-hidden bg-gray-50 p-4">
