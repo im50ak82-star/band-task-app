@@ -119,6 +119,8 @@ const unsubscribe =
 onAuthStateChanged(
 auth,
 async (user) => {
+console.log("user:", user);
+
 setUser(user);
 
 if (!user) return;
