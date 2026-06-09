@@ -119,7 +119,6 @@ const unsubscribe =
 onAuthStateChanged(
 auth,
 async (user) => {
-console.log("user:", user);
 
 setUser(user);
 
@@ -339,6 +338,11 @@ order: index,
 if (needsNickname) {
 return (
 <main className="flex h-screen flex-col items-center justify-center gap-4">
+
+<div className="text-red-500">
+{user ? "ログイン済み" : "未ログイン"}
+</div>
+
 <h1 className="text-2xl font-bold">
 ニックネーム登録
 </h1>
