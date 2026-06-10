@@ -17,6 +17,10 @@ export default function LoginPage() {
 const router = useRouter();
 
 useEffect(() => {
+    console.log("currentUser", auth.currentUser);
+}, []);
+
+useEffect(() => {
 getRedirectResult(auth)
 .then((result) => {
 console.log("redirect result", result);
