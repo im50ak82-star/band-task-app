@@ -9,7 +9,7 @@ signInWithRedirect,
 
 export default function LoginPage() {
 const login = async () => {
-
+try {
 alert("押された");
 
 const provider =
@@ -20,6 +20,11 @@ auth,
 provider
 );
 
+alert("redirect実行");
+} catch (error) {
+    alert("エラー");
+    console.error(error);
+}
 };
 
 return (
