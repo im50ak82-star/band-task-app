@@ -144,11 +144,11 @@ return unsubscribe;
 }, []);
 
 
-useEffect(() => {
-    if (user === null) {
-        router.push("/login");
-    }
-}, [user, router]);
+//useEffect(() => {
+//    if (user === null) {
+//        router.push("/login");
+//    }
+//}, [user, router]);
 
 const [newEvent, setNewEvent] =
 useState("");
