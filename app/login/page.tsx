@@ -2,12 +2,13 @@
 
 import { auth } from "../../firebase";
 
-import { onAuthStateChanged } from "firebase/auth";
 import { useEffect } from "react";
 
 import {
 GoogleAuthProvider,
 signInWithRedirect,
+getRedirectResult,
+onAuthStateChanged,
 } from "firebase/auth";
 
 import { useRouter } from "next/navigation";
@@ -16,11 +17,22 @@ export default function LoginPage() {
 const router = useRouter();
 
 useEffect(() => {
+getRedirectResult(auth)
+.then((result) => {
+console.log("redirect result", result);
+
+if (result?.user) {
+router.push("/");
+}
+})
+.catch((error) => {
+console.error(error);
+});
+
 return onAuthStateChanged(auth, (user) => {
-console.log("login page user:", user);
+console.log("auth state", user);
 
 if (user) {
-alert("トップへ移動");
 router.push("/");
 }
 });
