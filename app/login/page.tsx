@@ -4,7 +4,7 @@ import { auth } from "../../firebase";
 
 import {
 GoogleAuthProvider,
-signInWithPopup,
+signInWithRedirect,
 } from "firebase/auth";
 
 export default function LoginPage() {
@@ -13,12 +13,11 @@ const provider =
 new GoogleAuthProvider();
 
 const result =
-await signInWithPopup(
+await signInWithRedirect(
 auth,
 provider
 );
 
-console.log(result.user);
 };
 
 return (
