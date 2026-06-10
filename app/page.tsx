@@ -108,11 +108,13 @@ progress?: number;
 >([]);
 
 const [user, setUser] =
-useState<any>(null);
+useState<any | undefined>(undefined);
 
 const [nickname, setNickname] = useState("");
 
 const [needsNickname, setNeedsNickname] = useState(false);
+
+const router = useRouter();
 
 useEffect(() => {
 const unsubscribe =
@@ -122,7 +124,9 @@ async (user) => {
 
 setUser(user);
 
-if (!user) return;
+if (!user) {
+return;
+}
 
 const userRef =
 doc(db, "users", user.uid);
@@ -140,10 +144,16 @@ return unsubscribe;
 }, []);
 
 
+useEffect(() => {
+    if (user === null) {
+        router.push("/login");
+    }
+}, [user, router]);
+
 const [newEvent, setNewEvent] =
 useState("");
 
-const router = useRouter();
+
 
 const sensors = useSensors(
 useSensor(PointerSensor, {
@@ -334,6 +344,14 @@ order: index,
 )
 );
 };
+
+if (user === undefined) {
+return (
+<div className="p-4">
+読み込み中...
+</div>
+);
+}
 
 if (needsNickname) {
 return (
