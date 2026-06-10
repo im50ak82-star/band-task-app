@@ -39,6 +39,9 @@ return unsubscribe;
 }, [router]);
 
 const login = async () => {
+
+alert("popup版");
+
 const provider =
 new GoogleAuthProvider();
 
