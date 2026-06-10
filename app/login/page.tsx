@@ -9,6 +9,9 @@ signInWithRedirect,
 
 export default function LoginPage() {
 const login = async () => {
+
+alert("押された");
+
 const provider =
 new GoogleAuthProvider();
 
