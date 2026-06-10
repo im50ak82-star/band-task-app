@@ -339,10 +339,6 @@ if (needsNickname) {
 return (
 <main className="flex h-screen flex-col items-center justify-center gap-4">
 
-<div className="text-red-500">
-{user ? "ログイン済み" : "未ログイン"}
-</div>
-
 <h1 className="text-2xl font-bold">
 ニックネーム登録
 </h1>
@@ -368,6 +364,11 @@ className="rounded-xl bg-black px-4 py-2 text-white"
 
 return (
 <main className="flex h-screen flex-col overflow-hidden bg-gray-50 p-4">
+
+<div className="text-red-500">
+    {user ? "ログイン済み" : "未ログイン"}
+</div>
+
 <h1 className="mb-6 text-3xl font-bold text-black">
 FPWE tasks
 </h1>
