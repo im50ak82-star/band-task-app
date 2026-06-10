@@ -6,8 +6,7 @@ import { useEffect } from "react";
 
 import {
 GoogleAuthProvider,
-signInWithRedirect,
-getRedirectResult,
+signInWithPopup,
 onAuthStateChanged,
 } from "firebase/auth";
 
@@ -21,50 +20,39 @@ useEffect(() => {
 }, []);
 
 useEffect(() => {
-getRedirectResult(auth)
-.then((result) => {
-console.log("redirect result", result);
-
-if (result?.user) {
-router.push("/");
-}
-})
-.catch((error) => {
-console.error(error);
-});
-
-return onAuthStateChanged(auth, (user) => {
-console.log("auth state", user);
+const unsubscribe =
+onAuthStateChanged(
+auth,
+(user) => {
+console.log(
+"auth state",
+user
+);
 
 if (user) {
 router.push("/");
 }
-});
+}
+);
+
+return unsubscribe;
 }, [router]);
 
 const login = async () => {
-try {
-
 const provider =
 new GoogleAuthProvider();
 
-await signInWithRedirect(
+try {
+await signInWithPopup(
 auth,
 provider
 );
 
-alert("redirect実行");
-} 
-catch (error: any) {
+alert("ログイン成功");
+router.push("/");
+} catch (error) {
 console.error(error);
-
-alert(
-error.code +
-"\n" +
-error.message
-);
 }
-
 };
 
 return (
