@@ -20,6 +20,7 @@ return onAuthStateChanged(auth, (user) => {
 console.log("login page user:", user);
 
 if (user) {
+alert("トップへ移動");
 router.push("/");
 }
 });
