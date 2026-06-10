@@ -21,10 +21,17 @@ provider
 );
 
 alert("redirect実行");
-} catch (error) {
-    alert("エラー");
-    console.error(error);
+} 
+catch (error: any) {
+console.error(error);
+
+alert(
+error.code +
+"\n" +
+error.message
+);
 }
+
 };
 
 return (
