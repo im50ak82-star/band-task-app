@@ -12,7 +12,6 @@ const login = async () => {
 const provider =
 new GoogleAuthProvider();
 
-const result =
 await signInWithRedirect(
 auth,
 provider
